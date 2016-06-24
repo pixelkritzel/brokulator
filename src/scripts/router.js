@@ -1,8 +1,10 @@
 import Calculation from './components/Calculation';
+import Transactions from './components/Transactions';
 import RouteNotFound from './components/RouteNotFound';
 
 const ROUTES = {
-  'calculation': Calculation
+  'calculation': Calculation,
+  'transactions': Transactions
 }
 
 function getView(route) {
