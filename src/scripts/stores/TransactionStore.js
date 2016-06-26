@@ -1,48 +1,29 @@
 import { observable, action, autorun } from 'mobx';
 
-const AccountStore = {
-  accounts: [{ id: 0, name: "Sparkasse"}, { id:1, name:"Geldspeicher"}]
-}
+import SaveableClass from '../helper/SaveableClass';
+import Transaction from '../models/transaction';
 
-function validateTransaction(transaction) {
-  const errorMessages = [];
-  if (!transaction.name) errorMessages.push('Transaction misses name');
-  if (!transaction.amount) errorMessages.push('Transaction misses amount');
-  if (!transaction.transactionType) errorMessages.push('Transaction misses transaction type');
-  if (!transaction.schedule) errorMessages.push('Transaction misses schedule');
-  if (!transaction.repetition) errorMessages.push('Transaction misses repetition type');
-  if (!transaction.account) errorMessages.push('Transaction misses account');
-  if (errorMessages.length > 0) {
-    errorMessages.unshift('Errors in transaction');
-    return errorMessages;
+class TransactionStore extends SaveableClass {
+  keysToExport = ['transactions'];
+  storageKey = 'BrokulatorTransactions';
+
+  constructor() {
+    super(...arguments);
+    this.load(data => {
+       this.transactions = data.transactions.map(transaction => new Transaction(transaction))
+    });
   }
-}
 
-let transactionsFromLocalStorage;
-try {
-  transactionsFromLocalStorage = JSON.parse(localStorage.getItem('Brokulator.Transactions'))
-} catch (e) {
-
-}
-
-class TransactionStore {
-  @observable transactions = transactionsFromLocalStorage || [];
+  @observable transactions = [];
 
   @action addTransaction(newTransaction) {
-    const errors = validateTransaction(newTransaction);
-    if (!errors) {
-      newTransaction.account = AccountStore.accounts.find(account => account.id == newTransaction.account);
-      this.transactions.push(newTransaction);
-    } else {
-      alert(errors.join('\n'));
-    }
+    const transaction = new Transaction(newTransaction);
+    this.transactions.push(transaction);
   }
 }
 
-const TransactionStoreSingleton = new TransactionStore();
+const transactionStore = new TransactionStore();
 
-autorun(function() {
-  localStorage.setItem('Brokulator.Transactions', JSON.stringify(TransactionStoreSingleton.transactions));
-})
+autorun(() => transactionStore.save());
 
-export default TransactionStoreSingleton;
+export default transactionStore;

@@ -20,7 +20,12 @@ export default class TransactionForm extends Component {
         formData[key] = formData[key].trim()
       }
     }
-    TransactionStore.addTransaction(formData);
+    try {
+     TransactionStore.addTransaction(formData);
+    } catch (error) {
+      alert(error);
+    }
+
   }
 
   render() {
@@ -43,10 +48,10 @@ export default class TransactionForm extends Component {
           <label  className="col-sm-2 control-label">Type</label>
           <div className="col-sm-10">
             <label className="radio-inline">
-              <input type="radio" name="transactionType" value="in" /> Income 
+              <input type="radio" name="transactionType" value="in" /> Income
             </label>
             <label className="radio-inline">
-              <input type="radio" name="transactionType" value="out" /> Spending 
+              <input type="radio" name="transactionType" value="out" /> Spending
             </label>
           </div>
         </div>
@@ -65,20 +70,20 @@ export default class TransactionForm extends Component {
               <option value="monthly">Monthly</option>
               <option value="quarterly">Quartly</option>
               <option value="half-yearly">Half-yearly</option>
-              <option value="yearly">Yearly</option> 
+              <option value="yearly">Yearly</option>
             </select>
           </div>
         </div>
         <div className="form-group">
           <label for="transactionAccount" className="col-sm-2 control-label">Account</label>
           <div className="col-sm-10">
-            <select className="form-control" name="account" id="transactionAccount">
+            <select className="form-control" name="_accountId" id="transactionAccount">
               <option value="">Please select an account</option>
-              { AccountStore.accounts.map( account => <option value={ account.id }>{ account.name }</option> ) } 
+              { AccountStore.accounts.map( account => <option value={ account.id }>{ account.name }</option> ) }
             </select>
           </div>
         </div>
-        <div className="form-group">
+        <div className="text-right">
           <button className="btn btn-primary" type="submit">Submit</button>
         </div>
       </form>

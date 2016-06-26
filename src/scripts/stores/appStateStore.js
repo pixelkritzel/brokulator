@@ -1,6 +1,16 @@
-import { observable, action } from 'mobx';
+import { observable, action, autorun } from 'mobx';
 
-class AppStateStore {
+import SaveableClass from '../helper/SaveableClass';
+
+class AppStateStore extends SaveableClass {
+  keysToExport = ['route']
+  storageKey = 'BrokulatorAppState';
+
+  constructor() {
+    super(...arguments);
+    this.load();
+  }
+
   @observable route = 'calculation'
 
   @action navigateTo(newRoute) {
@@ -9,4 +19,8 @@ class AppStateStore {
   }
 }
 
-export default new AppStateStore();
+const appStateStore = new AppStateStore();
+
+autorun(() => appStateStore.save());
+
+export default appStateStore;

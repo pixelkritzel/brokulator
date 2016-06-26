@@ -11,7 +11,9 @@ export default class TransactionList extends Component {
     console.log('store', transactionStore)
     return(
       <ul>
-        { transactionStore.transactions.map( transaction => <Transaction transaction={ transaction } />) }
+        { transactionStore.transactions.map( transaction => {
+          return <Transaction transaction={ transaction } key={ transaction.id } />}
+        ) }
       </ul>
     )
   }
