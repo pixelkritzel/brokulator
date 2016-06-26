@@ -10,7 +10,7 @@ class TransactionStore extends SaveableClass {
   constructor() {
     super(...arguments);
     this.load(data => {
-       this.transactions = data.transactions.map(transaction => new Transaction(transaction))
+       data && this.transactions = data.transactions.map(transaction => new Transaction(transaction))
     });
   }
 
