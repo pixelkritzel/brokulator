@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 
-import daysStore  from '../stores/days';
+import store  from '../stores/store';
 
 import Day from './Day';
 
@@ -10,7 +10,7 @@ class Days extends Component {
     render() {
         return(
             <ul>
-            { daysStore.days.map( day => <Day day={ day } key={ day }/>) }
+            { store.days.noOfDays.map( day => <Day day={ day } key={ day }/>) }
             </ul>
         )
     }

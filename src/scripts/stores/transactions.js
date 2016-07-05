@@ -10,7 +10,7 @@ class TransactionStore extends SaveableClass {
   constructor() {
     super(...arguments);
     this.load(data => {
-       data && this.transactions = data.transactions.map(transaction => new Transaction(transaction))
+       if(data) { this.transactions = data.transactions.map(transaction => new Transaction(transaction)); }
     });
   }
 
@@ -19,6 +19,16 @@ class TransactionStore extends SaveableClass {
   @action addTransaction(newTransaction) {
     const transaction = new Transaction(newTransaction);
     this.transactions.push(transaction);
+  }
+
+
+  @action delete(...args) {
+    args.forEach(idToDelete => {
+      const index = this.transactions.findIndex(transaction => transaction.id === idToDelete);
+      if (index >= 0) {
+        this.transactions.splice(index, 1);
+      } 
+    })
   }
 }
 

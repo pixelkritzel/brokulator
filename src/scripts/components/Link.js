@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import appStateStore from '../stores/appStateStore'; 
+import store from '../stores/store'; 
 
 export default class Link extends Component {
-  navigate = () => {
-    appStateStore.navigateTo(this.props.route)
+  navigate = (event) => {
+    event.preventDefault();
+    store.appState.navigateTo(this.props.route)
   }
 
   render() {
     return(
-      <button type="button" role="link" className="btn btn-link" onClick={ this.navigate }>
+      <a href="#" className="btn btn-link" onClick={ this.navigate }>
         {this.props.label}
-      </button>
+      </a>
     )
   }
 }

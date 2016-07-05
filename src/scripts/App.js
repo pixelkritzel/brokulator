@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import Navbar from './components/Navbar';
 
-import appStateStore from './stores/appStateStore';
+import store from './stores/store';
 import getView from './router';
 
 import DevTools from 'mobx-react-devtools';
@@ -12,7 +12,7 @@ import DevTools from 'mobx-react-devtools';
 @observer
 class App extends Component {
   render() {
-    const CurrentView = getView(appStateStore.route);
+    const CurrentView = getView(store.appState.route);
     return (
       <div>
         <Navbar />
@@ -24,5 +24,7 @@ class App extends Component {
     );
   }
 };
+
+window.addEventListener('keyup', () => console.log('Some key was pressed'))
 
 export default App;

@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 
 import DataExportClass from '../helper/DataExportClass';
 import generateId from '../helper/generateId';
@@ -23,8 +23,9 @@ function validateTransaction(transaction) {
 }
 
 export default class TransactionModel extends DataExportClass {
-  keysToExport = ['id', 'name', 'amount', 'transactionType', 'schedule', 'repetition', '_accountId']
+  keysToExport = ['id', 'creationDateString', 'updateDateString', 'name', 'amount', 'transactionType', 'schedule', 'repetition', '_accountId']
 
+  @observable updateDateString = '' 
   @observable name
   @observable amount
   @observable transactionType
@@ -36,14 +37,22 @@ export default class TransactionModel extends DataExportClass {
     return AccountStore.accounts.find( account => account.id == this._accountId )
   }
 
+ @action update(data) {
+   const newData = { ...(this.exportData()), data }
+   const error = validateTransaction(newData);
+   if (error) throw new Error(error.join('\n'));
+   data.updateDateString = (new Date()).toString();
+   Object.assign(this, data);
+   return this;
+ }
 
   constructor(transactionData) {
     super(...arguments);
-    console.log('new transaction', transactionData);
     const error = validateTransaction(transactionData);
     if (error) throw new Error(error.join('\n'));
     this._accountId = transactionData._accountId;
     this.id = transactionData.id || generateId();
+    this.creationDateString = transactionData.creationDateString || (new Date()).toString();
     this.name = transactionData.name;
     this.amount = transactionData.amount;
     this.transactionType = transactionData.transactionType;

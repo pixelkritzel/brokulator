@@ -13,7 +13,7 @@ class DaysStore {
 
   @observable period = 5;
 
-  @computed get days() {
+  @computed get noOfDays() {
     return generateDays(this.period);
   }
 
