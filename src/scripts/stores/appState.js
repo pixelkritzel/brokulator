@@ -12,9 +12,9 @@ class AppStateStore extends SaveableClass {
   }
 
   @observable route = 'calculation'
+  @observable transactions = { showAddTransactionForm: false }
 
   @action navigateTo(newRoute) {
-    console.log(newRoute)
     this.route = newRoute;
   }
 }

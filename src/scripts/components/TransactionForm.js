@@ -23,7 +23,6 @@ export default class TransactionForm extends Component {
       }
     }
     if (method === 'create') {
-      console.log('create');
       try {
         store.transactions.addTransaction(formData);
         this.props.closeForm();
@@ -32,7 +31,6 @@ export default class TransactionForm extends Component {
       }
     }
     if (method === 'update') {
-      console.log('update');
       try {
         store.transactions.transactions
              .find( transaction => transaction.id === previousTransactionData.id )

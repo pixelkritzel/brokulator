@@ -25,6 +25,4 @@ class App extends Component {
   }
 };
 
-window.addEventListener('keyup', () => console.log('Some key was pressed'))
-
 export default App;
