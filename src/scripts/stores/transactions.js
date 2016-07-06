@@ -4,29 +4,29 @@ import SaveableClass from '../helper/SaveableClass';
 import Transaction from '../models/transaction';
 
 class TransactionStore extends SaveableClass {
-  keysToExport = ['transactions'];
+  keysToExport = ['all'];
   storageKey = 'BrokulatorTransactions';
 
   constructor() {
     super(...arguments);
     this.load(data => {
-       if(data) { this.transactions = data.transactions.map(transaction => new Transaction(transaction)); }
+       if(data) { this.all = data.all.map(transaction => new Transaction(transaction)); }
     });
   }
 
-  @observable transactions = [];
+  @observable all = [];
 
   @action addTransaction(newTransaction) {
     const transaction = new Transaction(newTransaction);
-    this.transactions.push(transaction);
+    this.all.push(transaction);
   }
 
 
   @action delete(...args) {
     args.forEach(idToDelete => {
-      const index = this.transactions.findIndex(transaction => transaction.id === idToDelete);
+      const index = this.all.findIndex(transaction => transaction.id === idToDelete);
       if (index >= 0) {
-        this.transactions.splice(index, 1);
+        this.all.splice(index, 1);
       } 
     })
   }

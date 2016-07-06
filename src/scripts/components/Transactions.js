@@ -1,26 +1,32 @@
 import React, { Component } from 'react';
+import { observer } from 'mobx-react';
 
 import TransactionList from './TransactionList';
 import TransactionForm from './TransactionForm';
 
+import store from '../stores/store';
+
+@observer
 export default class Transactions extends Component {
-  showTransactionForm = () => {
-    this.setState({ showTransactionForm: true });
+  showAddTransactionForm = () => {
+    store.appState.transactions.showAddTransactionForm = true;
   }
 
-  hideTransactionForm = () => {
-    this.setState({ showTransactionForm: false });
+  hideAddTransactionForm = () => {
+    store.appState.transactions.showAddTransactionForm = false;
   }
 
-  render() {
-    const showTransactionForm = this.state && this.state.showTransactionForm; 
+  render() { 
     return(
-      <div>
-        { showTransactionForm ? 
-          <TransactionForm closeForm={ this.hideTransactionForm } method="create" />
-          : <button type="button" className="btn btn-primary" onClick={ this.showTransactionForm } >Add Transaction</button>
+      <div className="row">
+        { store.appState.transactions.showAddTransactionForm ? 
+          <div className="col-sm-4"><TransactionForm closeForm={ this.hideAddTransactionForm } method="create" /></div>
+          : <button type="button" className="btn btn-primary" onClick={ this.showAddTransactionForm } >Add Transaction</button>
         }
-        <TransactionList />
+        { store.appState.transactions.showAddTransactionForm ?
+          <div className="col-sm-8"><TransactionList /></div>
+          : <TransactionList />
+        }
       </div>
     )
   }

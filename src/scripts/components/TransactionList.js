@@ -9,8 +9,8 @@ import store from '../stores/store';
 export default class TransactionList extends Component {
   render() {
     return(
-      <ul>
-        { store.transactions.transactions.map( transaction => {
+      <ul className="row list-unstyled">
+        { store.transactions.all.map( transaction => {
           return <Transaction transaction={ transaction } key={ transaction.id } />}
         ) }
       </ul>
