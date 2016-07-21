@@ -1,73 +1,47 @@
-import React, { Component } from 'react';
+import React from 'react';
+
+import FormComponent from '../helper/FormComponent';
 
 import extractFormData from '../helper/extractFormData';
-
-import TransactionList from './TransactionList';
-
 import store  from '../stores/store';
 
-const AccountStore = {
-  accounts: [{ id: 0, name: "Sparkasse"}, { id:1, name:"Geldspeicher"}]
-}
+export default class TransactionForm extends FormComponent {
 
-export default class TransactionForm extends Component {
+  create(formData) {
+    try {
+      store.transactions.add(formData);
+      this.props.closeForm();
+    } catch (error) {
+      alert(error);
+    }
+  }
 
-  onSubmit = (event) => {
-    event.preventDefault();
-    const { method } = this.props;
+  update(formData) {
     const previousTransactionData = this.props.transaction || Object.create(null);
-    const formData = extractFormData(event.target);
-    for (let key in formData) {
-      if (typeof formData === 'string') {
-        formData[key] = formData[key].trim()
-      }
+    try {
+      store.transactions.all
+            .find( transaction => transaction.id === previousTransactionData.id )
+            .update({ ...previousTransactionData,...formData});
+      this.props.closeForm();
+    } catch (error) {
+      alert(error);
     }
-    if (method === 'create') {
-      try {
-        store.transactions.addTransaction(formData);
-        this.props.closeForm();
-      } catch (error) {
-        alert(error);
-      }
-    }
-    if (method === 'update') {
-      try {
-        store.transactions.all
-             .find( transaction => transaction.id === previousTransactionData.id )
-             .update({ ...previousTransactionData,...formData});
-        this.props.closeForm();
-      } catch (error) {
-        alert(error);
-      }
-    }
-    
-  }
-
-  closeFormIfEscapePressed = event => {
-    if (event.keyCode == 27) { this.props.closeForm() };
-  }
-
-  componentDidMount() {
-    window.addEventListener('keyup', this.closeFormIfEscapePressed);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keyup', this.closeFormIfEscapePressed);
   }
 
   render() {
     const transaction = this.props.transaction || { transactionType: 'in' };
     const title = this.props.method === 'create' ? 'New Transaction' : 'Edit Transaction'
+    const accounts = store.accounts.all
     return(
       <form onSubmit={ this.onSubmit } onKeyUp={ this.onKeyUp } >
         <h3>{ title }</h3>
         <div className="form-group">
           <label for="transactionName" className="control-label">Name</label>
-            <input type="text" name="name" className="form-control" id="transactionName" placeholder="Name" value={ transaction.name } />
+            <input type="text" name="name" className="form-control" id="transactionName" placeholder="Name" defaultValue={ transaction.name } />
         </div>
         <div className="form-group">
           <label for="transactionAmount" className="control-label">Amount</label>
-            <input type="number" name="amount" className="form-control" id="transactionAmount" placeholder="Amount" value={ transaction.amount }/>
+            <input type="number" name="amount" className="form-control" id="transactionAmount" placeholder="Amount" defaultValue={ transaction.amount }/>
         </div>
         <div className="form-group">
           <label  className="control-label">Type</label>
@@ -88,7 +62,7 @@ export default class TransactionForm extends Component {
         </div>
         <div className="form-group">
           <label for="transactionSchedule" className="control-label">Schedule</label>
-            <input type="date" name="schedule" className="form-control" id="transactionSchedule" placeholder="Schedule" value={ transaction.schedule } />
+            <input type="date" name="schedule" className="form-control" id="transactionSchedule" placeholder="Schedule" defaultValue={ transaction.schedule } />
         </div>
         <div className="form-group">
           <label for="transactionRepetition" className="control-label">Repetition</label>
@@ -105,7 +79,7 @@ export default class TransactionForm extends Component {
           <label for="transactionAccount" className="control-label">Account</label>
             <select className="form-control" name="_accountId" id="transactionAccount" defaultValue={ transaction._accountId } >
               <option value="">Please select an account</option>
-              { AccountStore.accounts.map( account => <option value={ account.id } key={ account.id }>
+              { accounts.map( account => <option value={ account.id } key={ account.id }>
                                                         { account.name }
                                                       </option> ) }
             </select>

@@ -18,7 +18,7 @@ const DisplayTransaction = function(transaction) { return(
     <dt>Repetition</dt>
     <dd>{ transaction.repetition }</dd>
     <dt>Account</dt>
-    <dd>{ transaction.account.name }</dd>
+    <dd>{ transaction.account && transaction.account.name }</dd>
   </dl>
 )}
 

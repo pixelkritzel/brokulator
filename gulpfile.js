@@ -1,7 +1,7 @@
 /**
  * Created by Dmytro on 3/27/2016.
  */
-var browserify = require('browserify'),
+var webpack = require('webpack-stream'),
     gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     sass = require('gulp-sass'),
@@ -24,16 +24,21 @@ function handleError(err) {
 }
 
 gulp.task('js', function () {
-    return browserify(entryPoint, {debug: true, extensions: ['es6']})
-        .transform("babelify")
-        .bundle()
-        .on('error', handleError)
-        .pipe(source('bundle.js'))
-        .pipe(buffer())
-        .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest('./build/scripts'))
-        .pipe(browserSync.reload({stream: true}));
+
+    return gulp.src(entryPoint)
+               .pipe(webpack({
+                    watch: true,
+                    module: {
+                        loaders: [
+                            { test: /\.js$/, loader: 'babel' },
+                        ],
+                    },
+                    output: {
+                        filename: 'bundle.js'
+                    }
+               }))
+               .pipe(gulp.dest('./build/scripts'))
+               .pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('browser-sync', function () {

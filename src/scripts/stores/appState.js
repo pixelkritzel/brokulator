@@ -1,8 +1,8 @@
 import { observable, action, autorun } from 'mobx';
 
-import SaveableClass from '../helper/SaveableClass';
+import SaveableMixinFactory from '../helper/SaveableMixin';
 
-class AppStateStore extends SaveableClass {
+class AppStateStore extends SaveableMixinFactory() {
   keysToExport = ['route']
   storageKey = 'BrokulatorAppState';
 
@@ -13,6 +13,7 @@ class AppStateStore extends SaveableClass {
 
   @observable route = 'calculation'
   @observable transactions = { showAddTransactionForm: false }
+  @observable accounts = { showAddAccountForm: false }
 
   @action navigateTo(newRoute) {
     this.route = newRoute;

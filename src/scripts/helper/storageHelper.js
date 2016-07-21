@@ -1,4 +1,4 @@
-import localforage from 'localforage'; 
+import localforage from '../vendor/localforage'; 
 
 export function loadFromStorage(key) {
   return localforage.getItem(key)

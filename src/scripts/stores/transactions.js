@@ -1,34 +1,23 @@
 import { observable, action, autorun } from 'mobx';
 
-import SaveableClass from '../helper/SaveableClass';
+import SaveableMixinFactory from '../helper/SaveableMixin';
+import CollectionClass from '../helper/CollectionClass';
+
 import Transaction from '../models/transaction';
 
-class TransactionStore extends SaveableClass {
+
+class TransactionStore extends SaveableMixinFactory(CollectionClass) {
   keysToExport = ['all'];
   storageKey = 'BrokulatorTransactions';
+  model = Transaction;
 
   constructor() {
     super(...arguments);
     this.load(data => {
-       if(data) { this.all = data.all.map(transaction => new Transaction(transaction)); }
+       if(data) { 
+         data.all.forEach( transaction => this.add(transaction) );
+        }
     });
-  }
-
-  @observable all = [];
-
-  @action addTransaction(newTransaction) {
-    const transaction = new Transaction(newTransaction);
-    this.all.push(transaction);
-  }
-
-
-  @action delete(...args) {
-    args.forEach(idToDelete => {
-      const index = this.all.findIndex(transaction => transaction.id === idToDelete);
-      if (index >= 0) {
-        this.all.splice(index, 1);
-      } 
-    })
   }
 }
 

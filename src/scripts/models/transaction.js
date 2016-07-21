@@ -1,11 +1,8 @@
 import { observable, computed, action } from 'mobx';
 
-import DataExportClass from '../helper/DataExportClass';
+import SaveableMixinFactory from '../helper/SaveableMixin';
 import generateId from '../helper/generateId';
-
-const AccountStore = {
-  accounts: [{ id: 0, name: "SPARDA"}, { id:1, name:"Geldspeicher"}]
-}
+import store from '../stores/store';
 
 function validateTransaction(transaction) {
 
@@ -22,10 +19,10 @@ function validateTransaction(transaction) {
   }
 }
 
-export default class TransactionModel extends DataExportClass {
+export default class TransactionModel extends SaveableMixinFactory() {
   keysToExport = ['id', 'creationDateString', 'updateDateString', 'name', 'amount', 'transactionType', 'schedule', 'repetition', '_accountId']
 
-  @observable updateDateString = '' 
+  updateDateString = '' 
   @observable name
   @observable amount
   @observable transactionType
@@ -34,7 +31,7 @@ export default class TransactionModel extends DataExportClass {
   @observable _accountId
 
   @computed get account() {
-    return AccountStore.accounts.find( account => account.id == this._accountId )
+    return store.accounts.all.find( account => account.id == this._accountId )
   }
 
  @action update(data) {
