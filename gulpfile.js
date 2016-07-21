@@ -38,7 +38,8 @@ gulp.task('js', function () {
                     }
                }))
                .pipe(gulp.dest('./build/scripts'))
-               .pipe(browserSync.reload({stream: true}));
+               .pipe(browserSync.reload({stream: true}))
+               .on('data', e => browserSync.reload());
 });
 
 gulp.task('browser-sync', function () {
