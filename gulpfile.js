@@ -30,9 +30,11 @@ gulp.task('js', function () {
                     watch: true,
                     devtool: 'source-map',
                     module: {
-                        loaders: [
-                            { test: /\.js$/, loader: 'babel' },
-                        ],
+                        loaders: [{
+                            test: /\.js$/,
+                            loader: 'babel',
+                            exclude: /(node_modules)/,
+                        }],
                     },
                     output: {
                         filename: 'bundle.js'

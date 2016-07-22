@@ -15,6 +15,8 @@ export class Store extends SaveableMixinFactory() {
   @computed get isLoaded() { return this.accounts.isLoaded && this.transactions.isLoaded; }
 }
 
-const store = new Store(); 
+const store = new Store();
+
+window.store = store; 
 
 export default store;

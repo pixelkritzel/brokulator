@@ -28,10 +28,12 @@
     "webpack-stream": "^3.2.0"
   },
   "dependencies": {
+    "chart.js": "^1.1.1",
     "mobx": "^2.3.3",
     "mobx-react": "^3.4.0",
     "moment": "^2.13.0",
     "react": "^15.1.0",
+    "react-chartjs": "^0.7.3",
     "react-dom": "^15.1.0"
   }
 }
