@@ -8,12 +8,18 @@ function fnReduceBalanceOfDay(previousBalance, transaction) {
 }
 
 function createAccountsWithTransactionsOfDay(momentDay, previousBalances) {
-  const accountsWithTransactionsOfDay = store.accounts.all.map( account =>  ({
+  let accountsWithTransactionsOfDay = store.accounts.all.map( account =>  ({
     account: account,
     transactionsOfDay: store.transactions.all.filter( transaction => transaction.testDate(momentDay) && transaction._accountId === account.id ),
     previousBalance: previousBalances ? previousBalances.find( o => o.account == account).previousBalance : account.balance
   }));
-  return accountsWithTransactionsOfDay.map( o => ({ ...o, balanceOfDay: o.transactionsOfDay.reduce(fnReduceBalanceOfDay, o.previousBalance ) }))
+  accountsWithTransactionsOfDay = accountsWithTransactionsOfDay.map( o => ({ ...o, balanceOfDay: o.transactionsOfDay.reduce(fnReduceBalanceOfDay, o.previousBalance ) }))
+  accountsWithTransactionsOfDay.push({
+    account: {},
+    transactionsOfDay: store.transactions.all.filter( transaction => transaction.testDate(momentDay) ),
+    balanceOfDay: accountsWithTransactionsOfDay.reduce( (prev, curr) => prev.balanceOfDay + curr.balanceOfDay)
+  })
+  return accountsWithTransactionsOfDay;
 }
 
 function extractPreviousBalances(accountsWithTransactionsOfDay) {

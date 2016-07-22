@@ -17,6 +17,7 @@ class Days extends Component {
                 Date
               </th>
               { store.accounts.all.map( account => <th key={ 'th' + account.id }>{ account.name }</th>)}
+              <th><strong>Sum</strong></th>
             </tr>
           </thead>
           <tbody>
