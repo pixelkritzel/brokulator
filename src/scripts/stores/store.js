@@ -1,4 +1,4 @@
-import { observable, action, autorun } from 'mobx';
+import { observable, action, autorun, computed } from 'mobx';
 
 import SaveableMixinFactory from '../helper/SaveableMixin';
 
@@ -12,6 +12,7 @@ export class Store extends SaveableMixinFactory() {
   @observable appState = appState
   @observable transactions = transactions
   @observable accounts = accounts
+  @computed get isLoaded() { return this.accounts.isLoaded && this.transactions.isLoaded; }
 }
 
 const store = new Store(); 

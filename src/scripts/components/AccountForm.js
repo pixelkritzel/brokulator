@@ -8,7 +8,6 @@ import store  from '../stores/store';
 export default class Account extends FormComponent {
 
   create(formData) {
-    debugger;
     try {
       store.accounts.add(formData);
       this.props.closeForm();

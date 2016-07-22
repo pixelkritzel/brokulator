@@ -26,6 +26,7 @@ export default class Account extends SaveableMixinFactory() {
      if (error) throw new Error(error.join('\n'));
      data.updateDateString = (new Date()).toString();
      Object.assign(this, data);
+     this.balance = parseInt(this.balance, 10);
      return this;
    }
 
@@ -36,6 +37,6 @@ export default class Account extends SaveableMixinFactory() {
     this.id = accountData.id || generateId();
     this.creationDateString = accountData.creationDateString || (new Date()).toString();
     this.name = accountData.name;
-    this.balance = accountData.balance;
+    this.balance = parseInt(accountData.balance, 10);
   }
 }

@@ -28,6 +28,7 @@ gulp.task('js', function () {
     return gulp.src(entryPoint)
                .pipe(webpack({
                     watch: true,
+                    devtool: 'source-map',
                     module: {
                         loaders: [
                             { test: /\.js$/, loader: 'babel' },

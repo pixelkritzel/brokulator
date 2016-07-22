@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 import FormComponent from '../helper/FormComponent';
 
@@ -62,7 +63,7 @@ export default class TransactionForm extends FormComponent {
         </div>
         <div className="form-group">
           <label for="transactionSchedule" className="control-label">Schedule</label>
-            <input type="date" name="schedule" className="form-control" id="transactionSchedule" placeholder="Schedule" defaultValue={ transaction.schedule } />
+          <input type="date" name="schedule" className="form-control" id="transactionSchedule" placeholder="Schedule" defaultValue={ transaction.schedule || moment(new Date()).format('YYYY-MM-DD') } min={ moment(new Date()).format('YYYY-MM-DD') } />
         </div>
         <div className="form-group">
           <label for="transactionRepetition" className="control-label">Repetition</label>
@@ -79,9 +80,7 @@ export default class TransactionForm extends FormComponent {
           <label for="transactionAccount" className="control-label">Account</label>
             <select className="form-control" name="_accountId" id="transactionAccount" defaultValue={ transaction._accountId } >
               <option value="">Please select an account</option>
-              { accounts.map( account => <option value={ account.id } key={ account.id }>
-                                                        { account.name }
-                                                      </option> ) }
+              { accounts.map( account => <option value={ account.id } key={ account.id }>{ account.name }</option> ) }
             </select>
         </div>
         <div className="text-right">

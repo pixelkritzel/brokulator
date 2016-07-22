@@ -7,12 +7,14 @@ import Account from '../models/account';
 class Accounts extends SaveableMixinFactory(CollectionClass) {
   keysToExport = ['all'];
   storageKey = 'BrokulatorAccounts';
+  @observable isLoaded = false;
   model = Account;
 
   constructor() {
     super(...arguments);
     this.load(data => {
        if(data) { data.all.forEach( account => this.add(account)) }
+       this.isLoaded = true; 
     });
   }
 

@@ -1,3 +1,3 @@
 export default function isMobxArray(arr) {
-  return arr && ( Array.isArray(arr) || Array.isArray(arr.slice()) );
+  return arr && ( Array.isArray(arr) || ( arr.slice && Array.isArray(arr.slice()) ) );
 }

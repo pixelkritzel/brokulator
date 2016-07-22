@@ -1,4 +1,5 @@
 import { observable, computed, action } from 'mobx';
+import moment from 'moment';
 
 import SaveableMixinFactory from '../helper/SaveableMixin';
 import generateId from '../helper/generateId';
@@ -40,7 +41,23 @@ export default class TransactionModel extends SaveableMixinFactory() {
    if (error) throw new Error(error.join('\n'));
    data.updateDateString = (new Date()).toString();
    Object.assign(this, data);
+   this.amount = parseInt(this.amount, 10);
    return this;
+ }
+
+ testDate(momentDay) {
+   if (this.repetition === 'never') {
+     return moment(this.schedule).isSame(momentDay, 'day');
+   }
+ }
+
+ apply(balance) {
+   if(this.transactionType === 'in') {
+     return balance + this.amount;
+   }
+   if(this.transactionType === 'out') {
+     return balance - this.amount;
+   }
  }
 
   constructor(transactionData) {
@@ -51,7 +68,7 @@ export default class TransactionModel extends SaveableMixinFactory() {
     this.id = transactionData.id || generateId();
     this.creationDateString = transactionData.creationDateString || (new Date()).toString();
     this.name = transactionData.name;
-    this.amount = transactionData.amount;
+    this.amount = parseInt(transactionData.amount, 10);
     this.transactionType = transactionData.transactionType;
     this.schedule = transactionData.schedule;
     this.repetition = transactionData.repetition;
