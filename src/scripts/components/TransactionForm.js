@@ -36,11 +36,11 @@ export default class TransactionForm extends FormComponent {
       <form onSubmit={ this.onSubmit } onKeyUp={ this.onKeyUp } >
         <h3>{ title }</h3>
         <div className="form-group">
-          <label for="transactionName" className="control-label">Name</label>
+          <label htmlFor="transactionName" className="control-label">Name</label>
             <input type="text" name="name" className="form-control" id="transactionName" placeholder="Name" defaultValue={ transaction.name } />
         </div>
         <div className="form-group">
-          <label for="transactionAmount" className="control-label">Amount</label>
+          <label htmlFor="transactionAmount" className="control-label">Amount</label>
             <input type="number" name="amount" className="form-control" id="transactionAmount" placeholder="Amount" defaultValue={ transaction.amount }/>
         </div>
         <div className="form-group">
@@ -61,11 +61,11 @@ export default class TransactionForm extends FormComponent {
           </div>
         </div>
         <div className="form-group">
-          <label for="transactionSchedule" className="control-label">Schedule</label>
+          <label htmlFor="transactionSchedule" className="control-label">Schedule</label>
           <input type="date" name="schedule" className="form-control" id="transactionSchedule" placeholder="Schedule" defaultValue={ transaction.schedule || moment(new Date()).format('YYYY-MM-DD') } min={ moment(new Date()).format('YYYY-MM-DD') } />
         </div>
         <div className="form-group">
-          <label for="transactionRepetition" className="control-label">Repetition</label>
+          <label htmlFor="transactionRepetition" className="control-label">Repetition</label>
             <select className="form-control" name="repetition" id="transactionRepetition" defaultValue={ transaction.repeition }>
               <option value="never" >Never</option>
               <option value="weekly" >Weekly</option>
@@ -76,7 +76,7 @@ export default class TransactionForm extends FormComponent {
             </select>
         </div>
         <div className="form-group">
-          <label for="transactionAccount" className="control-label">Account</label>
+          <label htmlFor="transactionAccount" className="control-label">Account</label>
             <select className="form-control" name="_accountId" id="transactionAccount" defaultValue={ transaction._accountId } >
               <option value="">Please select an account</option>
               { accounts.map( account => <option value={ account.id } key={ account.id }>{ account.name }</option> ) }

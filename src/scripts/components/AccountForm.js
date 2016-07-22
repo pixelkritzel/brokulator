@@ -35,11 +35,11 @@ export default class Account extends FormComponent {
       <form onSubmit={ this.onSubmit } onKeyUp={ this.onKeyUp } >
         <h3>{ title }</h3>
         <div className="form-group">
-          <label for="accountName" className="control-label">Name</label>
+          <label htmlFor="accountName" className="control-label">Name</label>
             <input type="text" name="name" className="form-control" id="accountName" placeholder="Name" defaultValue={ account.name } />
         </div>
         <div className="form-group">
-          <label for="accountBalance" className="control-label">Balance</label>
+          <label htmlFor="accountBalance" className="control-label">Balance</label>
             <input type="number" name="balance" className="form-control" id="accountBalance" placeholder="Balance" defaultValue={ account.balance }/>
         </div>
         <div className="text-right">
