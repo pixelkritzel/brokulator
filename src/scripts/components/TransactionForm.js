@@ -3,7 +3,6 @@ import moment from 'moment';
 
 import FormComponent from '../helper/FormComponent';
 
-import extractFormData from '../helper/extractFormData';
 import store  from '../stores/store';
 
 export default class TransactionForm extends FormComponent {
