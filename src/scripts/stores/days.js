@@ -49,6 +49,7 @@ function generateDays(numberOfDays, currentDate = moment()) {
 class DaysStore {
 
   @observable period = 5;
+  @observable periodType = 'days';
 
   @computed get selected() {
     return generateDays(this.period);

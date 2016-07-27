@@ -470,10 +470,10 @@ input[type="checkbox"] {
 // Heads up! This is mixin-ed into `.navbar-form` in navbars.less.
 
 // [converter] extracted from `.form-inline` for libsass compatibility
-@mixin form-inline {
+@mixin form-inline($minWidth: $screen-sm-min) {
 
   // Kick in the inline
-  @media (min-width: $screen-sm-min) {
+  @media (min-width: $minWidth) {
     // Inline-block all the things for "inline"
     .form-group {
       display: inline-block;
