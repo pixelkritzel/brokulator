@@ -20,8 +20,8 @@ export default class TransactionForm extends FormComponent {
     const previousTransactionData = this.props.transaction || Object.create(null);
     try {
       store.transactions.all
-            .find( transaction => transaction.id === previousTransactionData.id )
-            .update({ ...previousTransactionData,...formData});
+           .find( transaction => transaction.id === previousTransactionData.id )
+           .update({ ...previousTransactionData, ...formData});
       this.props.closeForm();
     } catch (error) {
       alert(error);

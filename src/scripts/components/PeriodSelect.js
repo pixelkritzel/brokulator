@@ -1,23 +1,26 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+import DatePicker from 'react-datepicker';
 
 import store from '../stores/store';
 
 @observer
 export default class PeriodSelect extends Component {
 
-    updatePeriod = () => {
-        const period = parseInt(this.refs.period.value, 10);
-        store.days.updatePeriod(period);
+    updatePeriod = (endDate) => {
+        store.days.updateEndDate(endDate);
     }
 
     render() {
         return(
             <div className="period-select__form">
                 <div className="form-group">
-                    <label htmlFor="endDate">Enddate</label>
-                    <input type="number" min="0" id="endDate" ref="period" onChange={ this.updatePeriod } value={ store.days.period } className="form-control"/>
+                    <label htmlFor="endDate">Till</label>
+                    <DatePicker selected={ store.days.endDate }
+                                onChange={ this.updatePeriod }
+                                className="form-control" />
                 </div>
+                <div className="form-group">in</div>
                 <div className="radio">
                     <label>
                         <input type="radio" name="periodType" value="days" defaultChecked={ store.days.periodType == 'days'}/> Days

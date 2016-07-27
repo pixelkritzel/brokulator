@@ -34,6 +34,7 @@
     "moment": "^2.13.0",
     "react": "^15.1.0",
     "react-chartjs": "^0.7.3",
+    "react-datepicker": "^0.28.2",
     "react-dom": "^15.1.0"
   }
 }

@@ -47,16 +47,21 @@ function generateDays(numberOfDays, currentDate = moment()) {
 }
 
 class DaysStore {
-
-  @observable period = 5;
   @observable periodType = 'days';
 
-  @computed get selected() {
-    return generateDays(this.period);
+  @observable endDate = moment().add(5, 'days');
+
+  @computed get periodLength() {
+    const today = moment();
+    return moment(this.endDate).diff(today, 'days') + 2;
   }
 
-  @action updatePeriod( days ) {
-    this.period = days;
+  @computed get selected() {
+    return generateDays(this.periodLength);
+  }
+
+  @action updateEndDate( endDate ) {
+    this.endDate = endDate;
   }
 }
 
