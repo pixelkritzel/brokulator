@@ -10,19 +10,19 @@ function fnReduceBalanceOfStep(previousBalance, transaction) {
 function createAccountsWithTransactionsOfStep(momentDay, previousBalances) {
   let accountsWithTransactionsOfStep = store.accounts.all.map( account =>  ({
     account: account,
-    transactionsOfDay: store.transactions.all.filter( transaction =>
+    transactionsOfStep: store.transactions.all.filter( transaction =>
       transaction.testDate(momentDay) && transaction._accountId === account.id
     ),
     previousBalance: previousBalances ?
       previousBalances.find( o => o.account == account).previousBalance
       : account.balance
   }));
-  accountsWithTransactionsOfStep = accountsWithTransactionsOfStep.map( o => ({ ...o, balanceOfStep: o.transactionsOfDay.reduce(fnReduceBalanceOfStep, o.previousBalance ) }))
+  accountsWithTransactionsOfStep = accountsWithTransactionsOfStep.map( o => ({ ...o, balanceOfStep: o.transactionsOfStep.reduce(fnReduceBalanceOfStep, o.previousBalance ) }))
   // Sum column
   if (accountsWithTransactionsOfStep.length > 1) {
     accountsWithTransactionsOfStep.push({
       account: {},
-      transactionsOfDay: store.transactions.all.filter( transaction => transaction.testDate(momentDay) ),
+      transactionsOfStep: store.transactions.all.filter( transaction => transaction.testDate(momentDay) ),
       balanceOfStep: accountsWithTransactionsOfStep.reduce( (prev, curr) => prev.balanceOfStep + curr.balanceOfStep)
     })
   }
