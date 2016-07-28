@@ -3,10 +3,10 @@ import { observer } from 'mobx-react';
 
 import store  from '../stores/store';
 
-import Day from './Day';
+import CalculationStep from './CalculationStep';
 
 @observer
-class Days extends Component {
+class CalculationSteps extends Component {
   render() {
     if (store.isLoaded) {
       return(
@@ -21,7 +21,7 @@ class Days extends Component {
             </tr>
           </thead>
           <tbody>
-            { store.days.selected.map( day => <Day day={ day } key={ day.moment.format('YYYY-MM-DD') }/>) }
+            { store.period.selectedSteps.map( step => <CalculationStep step={ step } key={ step.moment.format('YYYY-MM-DD') }/>) }
           </tbody>
         </table>
       )
@@ -33,4 +33,4 @@ class Days extends Component {
 
 
 
-export default Days;
+export default CalculationSteps;
