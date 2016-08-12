@@ -8,7 +8,7 @@ import CalculationSteps from './CalculationSteps';
 
 function generateChartData() {
   const steps = store.period.selectedSteps;
-  const labels = steps.map( step => step.moment.format('YYYY-MM-DD'))
+  const labels = steps.map( step => store.period.periodType === 'days' ? step.moment.format('YYYY-MM-DD') : step.moment.format('MMM'))
   const datasets = [{
     label: 'Aggregated',
     fillColor: "rgba(220,220,220,0.2)",

@@ -54,7 +54,7 @@ class PeriodStore {
 
   @computed get periodLength() {
     const today = moment();
-    return moment(this.endDate).diff(today, 'days') + 2;
+    return moment(this.endDate).diff(today, this.periodType) + 2;
   }
 
   @computed get selectedSteps() {
