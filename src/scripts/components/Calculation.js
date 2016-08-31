@@ -6,9 +6,24 @@ import store from '../stores/store';
 import PeriodSelect from './PeriodSelect';
 import CalculationSteps from './CalculationSteps';
 
+const options = {
+    bezierCurve : false,
+    scales: {
+        xAxes: [{
+            type: 'linear',
+            position: 'bottom'
+        }]
+    }
+}
+
+const dateFormats = new Map();
+dateFormats.set('days', 'YYYY-MM-DD');
+dateFormats.set('months', 'MMM');
+
 function generateChartData() {
   const steps = store.period.selectedSteps;
-  const labels = steps.map( step => store.period.periodType === 'days' ? step.moment.format('YYYY-MM-DD') : step.moment.format('MMM'))
+  const usedDateFormat = dateFormats.get(store.period.periodType);
+  const labels = steps.map( step => step.moment.format(usedDateFormat));
   const datasets = [{
     label: 'Aggregated',
     fillColor: "rgba(220,220,220,0.2)",
@@ -39,22 +54,13 @@ function generateChartData() {
 @observer
 class Calculation extends Component {
     render() {
-     const options = {
-       bezierCurve : false,
-        scales: {
-            xAxes: [{
-                type: 'linear',
-                position: 'bottom'
-            }]
-        }
-    }
-        return(
-          <div>
-            <PeriodSelect />
-            { store.isLoaded ? <Line data={ generateChartData() } options={ options } width="600" height="250" /> : void 0}
-            <CalculationSteps />
-          </div>
-        )
+      return(
+        <div>
+          <PeriodSelect />
+          { store.isLoaded ? <Line data={ generateChartData() } options={ options } /> : void 0}
+          <CalculationSteps />
+        </div>
+      )
     }
 }
 
