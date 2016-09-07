@@ -3,15 +3,17 @@ import moment from 'moment';
 
 import store from './store';
 
+import calculateMonthDiff from '../helper/calculateMonthDiff'; 
+
 function fnReduceBalanceOfStep(previousBalance, transaction) {
   return transaction.apply(previousBalance)
 }
 
-function createAccountsWithTransactionsOfStep(momentDay, previousBalances) {
+function createAccountsWithTransactionsOfStep(step, previousBalances) {
   let accountsWithTransactionsOfStep = store.accounts.all.map( account =>  ({
     account: account,
     transactionsOfStep: store.transactions.all.filter( transaction =>
-      transaction.testDate(momentDay) && transaction._accountId === account.id
+      transaction._accountId === account.id && transaction.testDate(step.moment.clone(), step.periodType)
     ),
     previousBalance: previousBalances ?
       previousBalances.find( o => o.account == account).previousBalance
@@ -22,7 +24,7 @@ function createAccountsWithTransactionsOfStep(momentDay, previousBalances) {
   if (accountsWithTransactionsOfStep.length > 1) {
     accountsWithTransactionsOfStep.push({
       account: {},
-      transactionsOfStep: store.transactions.all.filter( transaction => transaction.testDate(momentDay) ),
+      transactionsOfStep: store.transactions.all.filter( transaction => transaction.testDate(step.moment.clone(), step.periodType) ),
       balanceOfStep: accountsWithTransactionsOfStep.reduce( (prev, curr) => prev.balanceOfStep + curr.balanceOfStep)
     })
   }
@@ -36,12 +38,12 @@ function extractPreviousBalances(accountsWithTransactionsOfStep) {
 function generateSteps(numberPeriodSteps, periodType, currentDate = moment()) {
     const steps = [];
     for (let i = 0; i < numberPeriodSteps; i++) {
-        const step = { moment: moment(currentDate).add(i, periodType) }
+        const step = { moment: moment(currentDate).add(i, periodType), periodType: periodType }
         let previousBalances;
         if (i > 0) {
           previousBalances = extractPreviousBalances(steps[i-1].accountsWithTransactionsOfStep);
         }
-        step.accountsWithTransactionsOfStep = createAccountsWithTransactionsOfStep(step.moment.clone(), previousBalances);
+        step.accountsWithTransactionsOfStep = createAccountsWithTransactionsOfStep(step, previousBalances);
         steps.push(step)
     }
     return steps;
@@ -54,7 +56,12 @@ class PeriodStore {
 
   @computed get periodLength() {
     const today = moment();
-    return moment(this.endDate).diff(today, this.periodType) + 2;
+    if (this.periodType === 'days') {
+      return moment(this.endDate).diff(today, this.periodType) + 1;
+    }
+    if (this.periodType === 'months') {
+      return calculateMonthDiff(today, this.endDate) + 1;
+    }
   }
 
   @computed get selectedSteps() {
