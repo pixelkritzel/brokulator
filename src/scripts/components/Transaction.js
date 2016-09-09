@@ -17,6 +17,8 @@ const DisplayTransaction = function(transaction) { return(
     <dd>{ transaction.schedule }</dd>
     <dt>Repetition</dt>
     <dd>{ transaction.repetition }</dd>
+    <dt>Enddate of Repetition</dt>
+    <dd>{ transaction.repetitionEndDate || 'None' }</dd>
     <dt>Account</dt>
     <dd>{ transaction.account && transaction.account.name }</dd>
   </dl>

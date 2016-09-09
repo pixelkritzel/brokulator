@@ -32,7 +32,7 @@ export default class Account extends FormComponent {
     const account = this.props.account || {} ;
     const title = this.props.method === 'create' ? 'New Account' : 'Edit Account'
     return(
-      <form onSubmit={ this.onSubmit } onKeyUp={ this.onKeyUp } >
+      <form onSubmit={ this.applyChanges } onKeyUp={ this.onKeyUp } >
         <h3>{ title }</h3>
         <div className="form-group">
           <label htmlFor="accountName" className="control-label">Name</label>

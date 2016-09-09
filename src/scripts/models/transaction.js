@@ -1,4 +1,4 @@
-import { observable, computed, action } from 'mobx';
+import { observable, computed, action, autorun } from 'mobx';
 import moment from 'moment';
 
 import SaveableMixinFactory from '../helper/SaveableMixin';
@@ -41,20 +41,26 @@ const testDateMonthly = function(momentDay, periodType, transaction) {
   const monthDiff = calculateMonthDiff(moment(transaction.schedule), momentDay);
   const transactionScheduleDate = moment(transaction.schedule).add(monthDiff, 'month');
   if (periodType === 'days') {
+    if (transaction.repetitionEndDate && transactionScheduleDate.isAfter(transaction.repetitionEndDate)) {
+      return false;
+    }
     return transactionScheduleDate.isSame(momentDay, 'day');
   }
   if (periodType === 'months') {
     const startDate = isCurrentMonth ? today : momentDay.clone().startOf('month');
     const endDate = momentDay.clone().endOf('month');
     const result =  transactionScheduleDate.isBetween(startDate, endDate, null, '[]');
-    return result
+    if (transaction.repetitionEndDate && startDate.isAfter(transaction.repetitionEndDate)) {
+      return false;
+    }
+    return result;
   }
 }
 
 testDateFunctions.set('monthly', testDateMonthly);
 
 export default class TransactionModel extends SaveableMixinFactory() {
-  keysToExport = ['id', 'creationDateString', 'updateDateString', 'name', 'amount', 'transactionType', 'schedule', 'repetition', '_accountId']
+  keysToExport = ['id', 'creationDateString', 'updateDateString', 'name', 'amount', 'transactionType', 'schedule', 'repetition', 'repetitionEndDate', '_accountId']
 
   updateDateString = '' 
   @observable name
@@ -62,6 +68,7 @@ export default class TransactionModel extends SaveableMixinFactory() {
   @observable transactionType
   @observable schedule
   @observable repetition
+  @observable repetitionEndDate
   @observable _accountId
 
   @computed get account() {
@@ -103,5 +110,6 @@ export default class TransactionModel extends SaveableMixinFactory() {
     this.transactionType = transactionData.transactionType;
     this.schedule = transactionData.schedule;
     this.repetition = transactionData.repetition;
+    this.repetitionEndDate = transactionData.repetitionEndDate;
   }
 }

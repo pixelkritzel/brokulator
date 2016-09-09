@@ -1,10 +1,12 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import moment from 'moment';
 
 import FormComponent from '../helper/FormComponent';
 
 import store  from '../stores/store';
 
+@observer
 export default class TransactionForm extends FormComponent {
 
   create(formData) {
@@ -16,13 +18,15 @@ export default class TransactionForm extends FormComponent {
     }
   }
 
-  update(formData) {
+  update(formData, eventType) {
     const previousTransactionData = this.props.transaction || Object.create(null);
     try {
       store.transactions.all
            .find( transaction => transaction.id === previousTransactionData.id )
            .update({ ...previousTransactionData, ...formData});
-      this.props.closeForm();
+      if (eventType === 'submit') {
+        this.props.closeForm();
+      }
     } catch (error) {
       alert(error);
     }
@@ -33,7 +37,7 @@ export default class TransactionForm extends FormComponent {
     const title = this.props.method === 'create' ? 'New Transaction' : 'Edit Transaction'
     const accounts = store.accounts.all
     return(
-      <form onSubmit={ this.onSubmit } onKeyUp={ this.onKeyUp } >
+      <form onSubmit={ this.onSubmit } onChange={ this.applyChanges } onKeyUp={ this.onKeyUp } >
         <h3>{ title }</h3>
         <div className="form-group">
           <label htmlFor="transactionName" className="control-label">Name</label>
@@ -66,7 +70,7 @@ export default class TransactionForm extends FormComponent {
         </div>
         <div className="form-group">
           <label htmlFor="transactionRepetition" className="control-label">Repetition</label>
-            <select className="form-control" name="repetition" id="transactionRepetition" defaultValue={ transaction.repeition }>
+            <select className="form-control" name="repetition" id="transactionRepetition" defaultValue={ transaction.repetition }>
               <option value="never" >Never</option>
               <option value="weekly" >Weekly</option>
               <option value="monthly" >Monthly</option>
@@ -75,6 +79,12 @@ export default class TransactionForm extends FormComponent {
               <option value="yearly" >Yearly</option>
             </select>
         </div>
+        { transaction.repetition === 'never' ?
+          '' :
+          <div className="form-group">
+            <label htmlFor="transactionRepetitionEndDate" className="control-label">RepetitionEndDate</label>
+            <input type="date" name="repetitionEndDate" className="form-control" id="transactionRepetitionEndDate" placeholder="Repetition End Date" defaultValue={ transaction.repetitionEndDate || ''} min={ moment(new Date()).format('YYYY-MM-DD') } />
+          </div> }
         <div className="form-group">
           <label htmlFor="transactionAccount" className="control-label">Account</label>
             <select className="form-control" name="_accountId" id="transactionAccount" defaultValue={ transaction._accountId } >
