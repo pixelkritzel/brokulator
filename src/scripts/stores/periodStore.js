@@ -24,7 +24,6 @@ function createAccountsWithTransactionsOfStep(step, previousBalances) {
   if (accountsWithTransactionsOfStep.length > 1) {
     accountsWithTransactionsOfStep.push({
       account: {},
-      transactionsOfStep: store.transactions.all.filter( transaction => transaction.testDate(step.moment.clone(), step.periodType) ),
       balanceOfStep: accountsWithTransactionsOfStep.reduce( (prev, curr) => prev.balanceOfStep + curr.balanceOfStep)
     })
   }
