@@ -1,4 +1,4 @@
-import { observable, action, autorun } from 'mobx';
+import { observable, action, autorun, computed } from 'mobx';
 
 import SaveableMixinFactory from '../helper/SaveableMixin';
 import CollectionClass from '../helper/CollectionClass';
@@ -19,6 +19,14 @@ class Accounts extends SaveableMixinFactory(CollectionClass) {
   }
 
   @observable all = [];
+
+  @computed get alerts() {
+    const alerts = [];
+    if (this.all.length === 0) {
+      alerts.push('No accounts!');
+    }
+    return alerts;
+  }
 }
 
 const accountStore = new Accounts();

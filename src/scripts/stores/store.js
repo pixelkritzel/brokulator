@@ -14,7 +14,13 @@ export class Store extends SaveableMixinFactory() {
   @observable appState = appState
   @observable transactions = transactions
   @observable accounts = accounts
+  
   @computed get isLoaded() { return this.accounts.isLoaded && this.transactions.isLoaded; }
+  
+  @computed get alerts() {
+    const alerts = [...transactions.alerts, ...accounts.alerts];
+    return alerts;
+  }
 }
 
 const store = new Store();

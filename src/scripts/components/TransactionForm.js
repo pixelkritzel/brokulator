@@ -37,7 +37,7 @@ export default class TransactionForm extends FormComponent {
     const title = this.props.method === 'create' ? 'New Transaction' : 'Edit Transaction'
     const accounts = store.accounts.all
     return(
-      <form onSubmit={ this.applyChanges } onChange={ this.applyChanges } onKeyUp={ this.onKeyUp } >
+      <form onSubmit={ this.applyChanges } >
         <h3>{ title }</h3>
         <div className="form-group">
           <label htmlFor="transactionName" className="control-label">Name</label>
